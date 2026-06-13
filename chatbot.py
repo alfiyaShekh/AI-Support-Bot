@@ -1,44 +1,43 @@
-f=open("faqs.txt","r")
-faq=f.read()
-# print(faq)
+import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
-question=input("Ask a qustion")
+load_dotenv()
 
-# print("\n Questions:")
-# print(question)
+api_key = os.getenv("GEMINI_API_KEY")
 
-# print("\n Faqs:")
-# print(data)
+genai.configure(api_key=api_key)
 
-# # f strings
-# name="alfiya"
-# age=20
-# message=f"hello my name is {name} and my age is {age}"
-# #print(message)
+model = genai.GenerativeModel("gemini-2.5-flash")
 
-# a=17
-# b=8
-# sum=f"sum is {a+b}"
-# # print(sum)
+with open("faqs.txt", "r") as file:
+    faq_content = file.read()
 
-# name=input("Enter ur name")
-# # print(f"hello {name}")
+question = input("Ask your question: ")
 
+prompt = f"""
+You are a professional customer support assistant.
 
-################
-prompt=f"""
-You are customer support assistant.
+Rules:
+1. Answer only using the FAQ information provided.
+2. Do not make up answers.
+3. If the answer is not found in the FAQs, respond:
+   "I don't have enough information to answer that."
+4. Be polite and concise.
 
 FAQs:
-{faq}
+{faq_content}
 
 Question:
 {question}
 
-ans:
+Answer:
 """
 
-print(prompt)
-
-
-
+try:
+    response = model.generate_content(prompt)
+    print("\nBot:")
+    print(response.text)
+except Exception as e:
+    print("somthing went wrong")
+    print(e)
