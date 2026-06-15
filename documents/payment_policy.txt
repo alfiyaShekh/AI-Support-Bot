@@ -1,0 +1,9 @@
+Payment Policy
+
+We accept UPI, Credit Cards, Debit Cards, Net Banking, and selected digital wallets. All payments are processed through secure and encrypted payment gateways.
+
+Customers should verify payment details before completing a transaction. Payment confirmation is sent through email and SMS immediately after successful payment.
+
+In case of payment failure, customers may retry using the same or a different payment method. Failed transactions are usually reversed automatically by the bank within 3 business days.
+
+If an amount is deducted but the order is not confirmed, customers should contact support and provide transaction details. Refunds for duplicate or incorrect charges are processed after verification.
