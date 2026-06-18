@@ -1,6 +1,7 @@
 from fastapi import FastAPI #import fast api class
 from fastapi.middleware.cors import CORSMiddleware #import cors and middleware for backend and fronthend communication
 from pydantic import BaseModel
+from rag_chatbot import get_answer
 
 app = FastAPI() # create backend server
 
@@ -19,10 +20,15 @@ app.add_middleware(
 def home():
     return {"message": "Backend is running"}
 
-@app.post("/chat") # wehn somone sends the post requset run the below function
+ # when somone sends the post requset run the below function
 @app.post("/chat")
 def chat(request: ChatRequest):
 
+    answer, sources = get_answer(
+        request.question
+    )
+
     return {
-        "answer": request.question
+        "answer": answer,
+        "sources": sources
     }

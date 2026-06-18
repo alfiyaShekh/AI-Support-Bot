@@ -30,14 +30,14 @@ embedding_model = SentenceTransformer(
 # Load FAISS Index
 # -----------------------------
 index = faiss.read_index(
-    "faiss_index.bin"
+    "../faiss_index.bin"
 )
 
 # -----------------------------
 # Load Documents
 # -----------------------------
 with open(
-    "document_store.pkl",
+    "../document_store.pkl",
     "rb"
 ) as f:
 
@@ -82,10 +82,12 @@ if distances[0][0] > THRESHOLD:
 # Build Context
 # -----------------------------
 context = ""
+sources=[]
 
 for idx in indices[0]:
     context += documents[idx]
     context += "\n\n"
+    sources.append(file_names[index])
 
 # -----------------------------
 # Show Sources
@@ -129,8 +131,12 @@ try:
 
     print("\nAnswer:")
     print(response.text)
+    print(sources)
 
 except Exception as e:
 
     print("Something went wrong.")
     print(e)
+
+def get_answer(question):
+    return f"You asked: {question}", ["test.txt"]
