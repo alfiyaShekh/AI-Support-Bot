@@ -115,9 +115,11 @@ Answer:
             sources
         )
 
-    except Exception:
+    except Exception as e:
+         print("ERROR:")
+         print(e)
 
-        return (
-            "Something went wrong.",
+         return (
+           str(e),
             []
         )

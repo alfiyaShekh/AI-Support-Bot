@@ -1,13 +1,23 @@
 import { useState } from "react";
 
 function App() {
-  const [answer, setAnswer] = useState("");
+  // const [answer, setAnswer] = useState("");
+  const [messages,setMessages]=useState([]);
   const [question, setQuestion] = useState("");
-  const [sources,setSources] = useState([]);
+  // const [sources,setSources] = useState([]);
 
   const handleSend = async () => {
+
+     setMessages([
+    ...messages,
+    {
+      role: "user",
+      text: question,
+    },
+  ]);
     const response = await fetch(
       "http://127.0.0.1:8000/chat",
+
       {
         method: "POST",
         headers: { // used to tell backend that the data IU am sending is in Json format
@@ -22,6 +32,14 @@ function App() {
   console.log(response);
 
     const data = await response.json();
+    setMessages((prevMessages) => [
+  ...prevMessages,
+  {
+    role: "bot",
+    text: data.answer,
+    sources: data.sources,
+  },
+]);
     console.log(data);
     
 
@@ -44,15 +62,32 @@ function App() {
         Send
       </button>
 
-      <p>{answer}</p>
+            {messages.map((msg, index) => (
+  <div key={index}>
 
-      <h3>Sources:</h3>
+    <h4>
+      {msg.role === "user" ? "👤 User" : "🤖 Bot"}
+    </h4>
 
-       <ul>
-         {sources.map((source, index) => (
-           <li key={index}>{source}</li>
-         ))}
-       </ul>
+    <p>{msg.text}</p>
+
+    {msg.role === "bot" && msg.sources && (
+      <>
+        <h5>Sources:</h5>
+
+        <ul>
+          {msg.sources.map((source, i) => (
+            <li key={i}>{source}</li>
+          ))}
+        </ul>
+      </>
+    )}
+
+    <hr />
+
+  </div>
+))}
+
       </div>
   );
 }
