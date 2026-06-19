@@ -1,13 +1,12 @@
 from sentence_transformers import SentenceTransformer
 import faiss
 import pickle
-
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
 # -----------------------------
-# Load Gemini API Key
+# Gemini Setup
 # -----------------------------
 load_dotenv()
 
@@ -46,61 +45,46 @@ with open(
 documents = data["documents"]
 file_names = data["file_names"]
 
-# -----------------------------
-# User Question
-# -----------------------------
-question = input("Ask a question: ")
 
 # -----------------------------
-# Convert Question to Embedding
+# Main Function
 # -----------------------------
-query_embedding = embedding_model.encode(
-    [question]
-)
+def get_answer(question):
 
-# -----------------------------
-# Search Top 3 Documents
-# -----------------------------
-distances, indices = index.search(
-    query_embedding,
-    k=3
-)
+    # Convert Question to Embedding
+    query_embedding = embedding_model.encode(
+        [question]
+    )
 
-print("\nDistances:")
-print(distances)
+    # Search Top 3 Documents
+    distances, indices = index.search(
+        query_embedding,
+        k=3
+    )
 
-# -----------------------------
-# Threshold Check
-# -----------------------------
-THRESHOLD = 2.0
+    THRESHOLD = 2.0
 
-if distances[0][0] > THRESHOLD:
-    print("\nNo relevant information found.")
-    exit()
+    if distances[0][0] > THRESHOLD:
+        return (
+            "I don't have enough information.",
+            []
+        )
 
-# -----------------------------
-# Build Context
-# -----------------------------
-context = ""
-sources=[]
+    # Build Context
+    context = ""
+    sources = []
 
-for idx in indices[0]:
-    context += documents[idx]
-    context += "\n\n"
-    sources.append(file_names[index])
+    for idx in indices[0]:
 
-# -----------------------------
-# Show Sources
-# -----------------------------
-print("\nRetrieved Sources:")
+        context += documents[idx]
+        context += "\n\n"
 
-for idx in indices[0]:
-    print(file_names[idx])
+        sources.append(
+            file_names[idx]
+        )
 
-# -----------------------------
-# Build Prompt
-# -----------------------------
-prompt = f"""
+    # Build Prompt
+    prompt = f"""
 You are a professional customer support assistant.
 
 Rules:
@@ -120,23 +104,20 @@ Question:
 Answer:
 """
 
-# -----------------------------
-# Gemini Response
-# -----------------------------
-try:
+    try:
 
-    response = gemini_model.generate_content(
-        prompt
-    )
+        response = gemini_model.generate_content(
+            prompt
+        )
 
-    print("\nAnswer:")
-    print(response.text)
-    print(sources)
+        return (
+            response.text,
+            sources
+        )
 
-except Exception as e:
+    except Exception:
 
-    print("Something went wrong.")
-    print(e)
-
-def get_answer(question):
-    return f"You asked: {question}", ["test.txt"]
+        return (
+            "Something went wrong.",
+            []
+        )

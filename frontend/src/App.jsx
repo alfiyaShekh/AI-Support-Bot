@@ -3,6 +3,7 @@ import { useState } from "react";
 function App() {
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
+  const [sources,setSources] = useState([]);
 
   const handleSend = async () => {
     const response = await fetch(
@@ -18,9 +19,14 @@ function App() {
       }
     );
 
+  console.log(response);
+
     const data = await response.json();
+    console.log(data);
+    
 
     setAnswer(data.answer);
+    setSources(data.sources);
   };
 
   return (
@@ -39,7 +45,15 @@ function App() {
       </button>
 
       <p>{answer}</p>
-    </div>
+
+      <h3>Sources:</h3>
+
+       <ul>
+         {sources.map((source, index) => (
+           <li key={index}>{source}</li>
+         ))}
+       </ul>
+      </div>
   );
 }
 
