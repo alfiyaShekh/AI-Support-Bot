@@ -49,7 +49,7 @@ function App() {
 
   return (
     <div>
-      <h1>AI Support Bot</h1>
+      <h1 className="text-3xl">AI Support Bot</h1>
 
       <input
         type="text"
@@ -63,30 +63,30 @@ function App() {
       </button>
 
             {messages.map((msg, index) => (
-  <div key={index}>
-
-    <h4>
-      {msg.role === "user" ? "👤 User" : "🤖 Bot"}
-    </h4>
-
-    <p>{msg.text}</p>
-
-    {msg.role === "bot" && msg.sources && (
-      <>
-        <h5>Sources:</h5>
-
-        <ul>
-          {msg.sources.map((source, i) => (
-            <li key={i}>{source}</li>
+             <div key={index}>
+           
+               <h4>
+                 {msg.role === "user" ? "👤 User" : "🤖 Bot"}
+               </h4>
+           
+               <p>{msg.text}</p>
+           
+               {msg.role === "bot" && msg.sources && (
+                 <>
+                   <h5>Sources:</h5>
+           
+                   <ul>
+                     {msg.sources.map((source, i) => (
+                       <li key={i}>{source}</li>
+                     ))}
+                   </ul>
+                 </>
+               )}
+           
+               <hr />
+           
+             </div>
           ))}
-        </ul>
-      </>
-    )}
-
-    <hr />
-
-  </div>
-))}
 
       </div>
   );
