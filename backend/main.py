@@ -40,19 +40,96 @@ class Ticket(BaseModel):
     email:str
     issue:str
 
+
+
+# category detection
+def detect_category(issue):
+
+    issue = issue.lower()
+
+    if "payment" in issue:
+        return "Payment"
+
+    elif "login" in issue:
+        return "Account"
+
+    elif "delivery" in issue:
+        return "Shipping"
+
+    elif "bug" in issue:
+        return "Technical"
+
+    else:
+        return "General"
+
+# priority detection
+def detect_priority(issue):
+
+    issue = issue.lower()
+
+    if any(word in issue for word in [
+        "payment",
+        "refund",
+        "urgent",
+        "critical",
+        "error"
+    ]):
+        return "High"
+
+    elif any(word in issue for word in [
+        "login",
+        "password",
+        "account"
+    ]):
+        return "Medium"
+
+    else:
+        return "Low"
+
 @app.post("/ticket")
 def create_ticket(ticket:Ticket):
+   
+    category=detect_category(ticket.issue)
+    priority=detect_priority(ticket.issue)
     ticket_data={
         "name":ticket.name,
         "email": ticket.email,
-        "issue": ticket.issue
+        "issue": ticket.issue,
+        "category": category,
+        "priority":priority
     }
-    file_name=ticket.json
+   
+    file_name="tickets.json"
 
     if os.path.exists(file_name):
-        with open(file_name,"r+") as f:
-            ticket=json.load(f)
-            ticket.append(ticket_data)
-            f.seek(0)   # move cursor to beginning
-            json.dump(ticket, f, indent=4)
-            f.truncate()   # remove old leftover data
+
+        with open(file_name, "r+") as f:
+
+            tickets = json.load(f)
+
+            tickets.append(ticket_data)
+
+            f.seek(0)
+
+            json.dump(
+                tickets,
+                f,
+                indent=4
+            )
+
+            f.truncate()
+
+    else:
+
+        with open(file_name, "w") as f:
+
+            json.dump(
+                [ticket_data],
+                f,
+                indent=4
+            )
+
+    return {
+        "message": "Ticket created successfully"
+    }
+

@@ -1,0 +1,28 @@
+[
+    {
+        "name": "alfiya",
+        "email": "alfiya@gmail.com",
+        "issue": "h"
+    },
+    {
+        "name": "abc",
+        "email": "abc@123.com",
+        "issue": "payment issue",
+        "category": "Payment",
+        "priority": "High"
+    },
+    {
+        "name": "abc",
+        "email": "abc@123.com",
+        "issue": "login problem",
+        "category": "Account",
+        "priority": "Medium"
+    },
+    {
+        "name": "abc",
+        "email": "abc@123.com",
+        "issue": "login and payment issue",
+        "category": "Payment",
+        "priority": "High"
+    }
+]
