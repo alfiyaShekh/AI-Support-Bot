@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-
-  
-
 body {
   margin: 0;
 }
@@ -17,6 +14,6 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background:  #020617;
+  /* background:  #020617; */
   color: #F8FAFC;
 }

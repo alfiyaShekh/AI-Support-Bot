@@ -1,8 +1,16 @@
-import { useState } from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatPage from "./pages/ChatPage";
+import AdminDashboard from "./pages/AdminDashboard";
+
 function App() {
-   return <ChatPage />
+   return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ChatPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Routes>
+    </BrowserRouter>
+   )
   
 
 }
